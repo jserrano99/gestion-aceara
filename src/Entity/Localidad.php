@@ -25,6 +25,11 @@ class Localidad
     private $descripcion;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private $codigo;
+
+    /**
      * @ORM\ManyToOne(targetEntity=Provincia::class, inversedBy="localidads")
      */
     private $provincia;
@@ -133,4 +138,22 @@ class Localidad
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCodigo()
+    {
+        return $this->codigo;
+    }
+
+    /**
+     * @param mixed $codigo
+     */
+    public function setCodigo($codigo): void
+    {
+        $this->codigo = $codigo;
+    }
+
+
 }
