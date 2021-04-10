@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\FacturaRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -42,6 +44,16 @@ class Factura
      * @ORM\ManyToOne(targetEntity=Tratamiento::class, inversedBy="facturas")
      */
     private $tratamiento;
+
+    /**
+     * @ORM\OneToMany(targetEntity=FacturaLinea::class, mappedBy="factura", orphanRemoval=true)
+     */
+    private $facturaLineas;
+
+    public function __construct()
+    {
+        $this->facturaLineas = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -104,6 +116,36 @@ class Factura
     public function setTratamiento(?Tratamiento $tratamiento): self
     {
         $this->tratamiento = $tratamiento;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|FacturaLinea[]
+     */
+    public function getFacturaLineas(): Collection
+    {
+        return $this->facturaLineas;
+    }
+
+    public function addFacturaLinea(FacturaLinea $facturaLinea): self
+    {
+        if (!$this->facturaLineas->contains($facturaLinea)) {
+            $this->facturaLineas[] = $facturaLinea;
+            $facturaLinea->setFactura($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFacturaLinea(FacturaLinea $facturaLinea): self
+    {
+        if ($this->facturaLineas->removeElement($facturaLinea)) {
+            // set the owning side to null (unless already changed)
+            if ($facturaLinea->getFactura() === $this) {
+                $facturaLinea->setFactura(null);
+            }
+        }
 
         return $this;
     }

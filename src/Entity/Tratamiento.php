@@ -54,6 +54,11 @@ class Tratamiento
      */
     private $facturas;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Cliente::class, inversedBy="tratamientos")
+     */
+    private $cliente;
+
     public function __construct()
     {
         $this->facturas = new ArrayCollection();
@@ -165,4 +170,20 @@ class Tratamiento
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCliente() :?Cliente
+    {
+        return $this->cliente;
+    }
+
+
+    public function setCliente(?Cliente $cliente)
+    {
+        $this->cliente = $cliente;
+    }
+
+
 }

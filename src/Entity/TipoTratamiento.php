@@ -40,9 +40,15 @@ class TipoTratamiento
      */
     private $tratamientos;
 
+    /**
+     * @ORM\OneToMany(targetEntity=TratamientoConcepto::class, mappedBy="tipoTratamiento")
+     */
+    private $tratamiento;
+
     public function __construct()
     {
         $this->tratamientos = new ArrayCollection();
+        $this->tratamiento = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -114,5 +120,13 @@ class TipoTratamiento
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection|TratamientoConcepto[]
+     */
+    public function getTratamiento(): Collection
+    {
+        return $this->tratamiento;
     }
 }

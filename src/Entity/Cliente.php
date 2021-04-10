@@ -89,6 +89,10 @@ class Cliente
      */
     private $nif;
 
+    /**
+     * @ORM\Column(type="string", length=10, nullable=true)
+     */
+    private $idAnterior;
 
     /**
      * @ORM\ManyToOne(targetEntity=Localidad::class, inversedBy="clientes")
@@ -99,6 +103,7 @@ class Cliente
      * @ORM\OneToMany(targetEntity=Factura::class, mappedBy="cliente")
      */
     private $facturas;
+
 
     public function __construct()
     {
@@ -319,4 +324,21 @@ class Cliente
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getIdAnterior()
+    {
+        return $this->idAnterior;
+    }
+
+    /**
+     * @param mixed $idAnterior
+     */
+    public function setIdAnterior($idAnterior): void
+    {
+        $this->idAnterior = $idAnterior;
+    }
+
 }
