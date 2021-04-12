@@ -1,0 +1,52 @@
+<div class="btn-group btn-group-justified" role="group" aria-label="...">
+    <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle btn-info"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> CLientes
+            <span class="glyphicon glyphicon-blackboard"></span>
+            <span class="caret"></span>
+            <!-- aria-label="..." on the control -->
+
+
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="{{path("query_cliente")}}" target="_blank">Consulta</a></li>
+            <li role="separator" class="divider"></li>
+        </ul>
+    </div>
+    <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle btn-warning"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Facturas
+            <span class="glyphicon glyphicon-search"></span>
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="{{ path("query_facturas") }}" target="_blank">Consulta</a></li>
+            <li role="separator" class="divider"></li>
+        </ul>
+    </div>
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle btn-success"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Administracion
+                <span class="glyphicon glyphicon-search"></span>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="{{ path('mig_clientes') }}" target="_blank">Migración Clientes</a></li>
+                <li role="separator" class="divider"></li>
+            </ul>
+        </div>
+
+    <div class="btn-group">
+        <button type="button"
+                class="btn btn-default dropdown-toggle btn-info"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sesión
+            <span class="glyphicon glyphicon-user"></span>
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+{#            <li><a href="{{ path("cambioPassword",{"id":app.user.id}) }}">Cambio Password</a></li>#}
+            <li><a href="{{ path("app_logout") }}">Salir</a></li>
+        </ul>
+    </div>
+
+</div>

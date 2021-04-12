@@ -11,40 +11,11 @@
 
 {% block contenido %}
     <script>
-        $(document).ready(function () {
-            $('#tablaClientes').DataTable({
-                language: {"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"},
-                autoWidth: true,
-                jQueryUI: false,
-                stateSave: true,
-                dom: 'lftrip',
-                buttons: [],
-                order: [[0, "asc"]],
-                initComplete: function () {
-                    this.api().columns().every(function () {
-                        var column = this;
-                        var select = $('<select><option value=""></option></select>')
-                            .appendTo($(column.header()).empty())
-                            .on('change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex(
-                                    $(this).val()
-                                );
-                                column
-                                    .search(val ? '^' + val + '$' : '', true, false)
-                                    .draw();
-                            });
-                        column.data().unique().sort().each(function (d, j) {
-                            select.append('<option value="' + d + '">' + d + '</option>')
-                        });
-                    });
-                },
 
-            });
-        });
     </script>
 
     <div class="container">
-        <table id="tablaCliente" class="table table-striped table-bordered">
+        <table id="tablaClientes" class="tabla table table-striped table-bordered">
             <thead>
             <tr>
                 <th>id</th>
@@ -53,14 +24,6 @@
                 <th>Primer Apellido</th>
                 <th>Segundo Apellido</th>
                 <th>Acciones</th>
-            </tr>
-            <tr>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -72,25 +35,12 @@
                     <td>{{ registro.apellido1 }}</td>
                     <td>{{ registro.apellido2 }}</td>
                     <td>
-                        <a href="{{ path("query_tratamientos",{"id":registro.id}) }}">
+                        <a href="{{ path("query_tratamientos",{"cliente_id":registro.id}) }}">
                             <span class="glyphicon glyphicon-search"></span> </a>
                     </td>
                 </tr>
             {% endfor %}
             </tbody>
-            <tfoot>
-            <tr>
-                <td style=" font-weight:bold;text-align:right" colspan="4">Total</td>
-                <td style=" font-weight:bold;text-align: right"></td>
-                <td style=" font-weight:bold;text-align: right"></td>
-                <td style=" font-weight:bold;text-align: right"></td>
-                <td style=" font-weight:bold;text-align: right"></td>
-                <td style=" font-weight:bold;text-align: right"></td>
-                <td style=" font-weight:bold;text-align: right"></td>
-                <td style=" font-weight:bold;text-align: right"></td>
-                <td style=" font-weight:bold;text-align: right"></td>
-            </tr>
-            </tfoot>
         </table>
     </div>
 {% endblock %}

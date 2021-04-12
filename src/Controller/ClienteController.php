@@ -28,7 +28,7 @@ class ClienteController extends AbstractController
     }
 
     /**
-     * @Route("/cliente/tratamientos/query", name="query_tratamientos")
+     * @Route("/cliente/tratamiento/query/{cliente_id}", name="query_tratamientos")
      * @param Request $request
      * @param int $cliente_id
      * @return JsonResponse|Response
@@ -38,14 +38,34 @@ class ClienteController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
         $Cliente = $em->getRepository("App:Cliente")->find($cliente_id);
-        $Tratamientos = $em->getRepository("App:Tratamiento")->findBy(['cliente'=> $Cliente]);
 
 
         return $this->render('cliente/queryTratamientos.html.twig', [
             'cliente' => $Cliente,
-            'tratamientos' => $Tratamientos
+            'tratamientos' => $Cliente->getTratamientos()
         ]);
     }
+
+    /**
+     * @Route("/cliente/tratamiento/edit/{tratamiento_id}", name="edit_tratamiento")
+     * @param Request $request
+     * @param int $cliente_id
+     * @return JsonResponse|Response
+     */
+
+    public function editTratamiento(Request $request,int $tratamiento_id): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $Tratamiento = $em->getRepository("App:Tratamiento")->find($tratamiento_id);
+
+
+        return $this->render('cliente/editTratamiento.html.twig', [
+            'cliente' => $Tratamiento->getCliente(),
+            'tratamiento' => $Tratamiento
+        ]);
+    }
+
+
 
 }
 

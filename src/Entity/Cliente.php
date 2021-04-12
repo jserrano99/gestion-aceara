@@ -104,6 +104,11 @@ class Cliente
      */
     private $facturas;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Tratamiento::class, mappedBy="cliente")
+     */
+    private $tratamientos;
+
 
     public function __construct()
     {
@@ -325,6 +330,35 @@ class Cliente
         return $this;
     }
 
+    /**
+     * @return Collection|Tratamiento[]
+     */
+    public function getTratamientos(): Collection
+    {
+        return $this->tratamientos;
+    }
+
+    public function addTratamiento(Tratamiento $tratamiento): self
+    {
+        if (!$this->tratamientos->contains($tratamiento)) {
+            $this->tratamientos[] = $tratamiento;
+            $tratamiento->setCliente($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTratamiento(Tratamiento $tratamiento): self
+    {
+        if ($this->tratamientos->removeElement($tratamiento)) {
+            // set the owning side to null (unless already changed)
+            if ($tratamiento->getCliente() === $this) {
+                $tratamiento->setCliente(null);
+            }
+        }
+
+        return $this;
+    }
     /**
      * @return mixed
      */

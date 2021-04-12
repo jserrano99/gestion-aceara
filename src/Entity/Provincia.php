@@ -87,7 +87,7 @@ class Provincia
     /**
      * @return Collection|Localidad[]
      */
-    public function getLocalis(): Collection
+    public function getLocalidades(): Collection
     {
         return $this->localidades;
     }

@@ -30,7 +30,7 @@ class Localidad
     private $codigo;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Provincia::class, inversedBy="localidads")
+     * @ORM\ManyToOne(targetEntity=Provincia::class, inversedBy="localidades")
      */
     private $provincia;
 
@@ -42,12 +42,12 @@ class Localidad
     /**
      * @ORM\OneToMany(targetEntity=CodigoPostal::class, mappedBy="localidad")
      */
-    private $codigosPostales;
+    private $codigoPostal;
 
     public function __construct()
     {
         $this->clientes = new ArrayCollection();
-        $this->codigosPostales = new ArrayCollection();
+        $this->codigoPostal = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -114,25 +114,25 @@ class Localidad
      */
     public function getCodigosPostales(): Collection
     {
-        return $this->codigosPostales;
+        return $this->codigoPostal;
     }
 
-    public function addCodigosPostale(CodigoPostal $codigosPostale): self
+    public function addCodigoPostal(CodigoPostal $codigoPostal): self
     {
-        if (!$this->codigosPostales->contains($codigosPostale)) {
-            $this->codigosPostales[] = $codigosPostale;
-            $codigosPostale->setLocalidad($this);
+        if (!$this->codigoPostal->contains($codigoPostal)) {
+            $this->codigoPostal[] = $codigoPostal;
+            $codigoPostal->setLocalidad($this);
         }
 
         return $this;
     }
 
-    public function removeCodigosPostale(CodigoPostal $codigosPostale): self
+    public function removeCodigoPostal(CodigoPostal $codigoPostal): self
     {
-        if ($this->codigosPostales->removeElement($codigosPostale)) {
+        if ($this->codigoPostal->removeElement($codigoPostal)) {
             // set the owning side to null (unless already changed)
-            if ($codigosPostale->getLocalidad() === $this) {
-                $codigosPostale->setLocalidad(null);
+            if ($codigoPostal->getLocalidad() === $this) {
+                $codigoPostal->setLocalidad(null);
             }
         }
 

@@ -23,7 +23,7 @@ class CodigoPostal
     private $codigo;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Localidad::class, inversedBy="codigosPostales")
+     * @ORM\ManyToOne(targetEntity=Localidad::class, inversedBy="codigoPostal")
      * @ORM\JoinColumn(nullable=false)
      */
     private $localidad;

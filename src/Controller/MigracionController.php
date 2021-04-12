@@ -52,38 +52,78 @@ class MigracionController extends AbstractController
      */
     public function migracionClientes(): Response
     {
-        $em = $this->getDoctrine()->getManager();
 
-
-        $OldClientes = $em->getRepository("App:OldClientes")->findAll();
-
+        $OldClientes = $this->getDoctrine()->getManager()->getRepository("App:OldClientes")->findBy(["migrado" => 0]);
+        dump(" CARGA MASIVA CLIENTES A CARGAR");
+        dump($OldClientes);
         /** @var OldClientes $OldCliente */
         foreach ($OldClientes as $OldCliente) {
-            $Cliente = new Cliente();
-            $Cliente->setAlias($OldCliente->getClienteDs());
-            $Cliente->setNombre($OldCliente->getClienteDsnombre());
-            $Cliente->setApellido1($OldCliente->getClienteDsapellido1());
-            $Cliente->setApellido2($OldCliente->getClienteDsapellido2());
-            $Cliente->setDomicilio($OldCliente->getClienteDsdomicilio());
-            /** @var CodigoPostal $CodigoPostal */
-            $CodigoPostal = $em->getRepository("App:CodigoPostal")->findOneBy(["codigo" => $OldCliente->getClienteCdpostal()]);
-            if ($CodigoPostal ) $Cliente->setCodigoPostal($CodigoPostal->getCodigo());
-            $Cliente->setLocalidad($CodigoPostal->getLocalidad());
-            $Cliente->setComentarios($OldCliente->getClienteDscomentarios());
-            $Cliente->setEmail($OldCliente->getClienteEmail());
-            $Cliente->setFechaAlta($OldCliente->getClienteFcalta());
-            $Cliente->setFechaNacimiento($OldCliente->getClienteFcnacimiento());
-            $Cliente->setMovil($OldCliente->getClienteDsmovil());
-            $Cliente->setNif($OldCliente->getClienteNif());
-            $Cliente->setProfesion($OldCliente->getClienteDsprofesion());
-            $Cliente->setTelefono($OldCliente->getClienteDstelefono());
-            $Cliente->setIdAnterior($OldCliente->getClienteId());
-            $em->persist($Cliente);
+            $this->cargaCLiente($OldCliente);
+        }
+        die();
+        return new Response();
+    }
+
+    /**
+     * @Route("/migracion/cliente/{oldcliente_id}", name="mig_cliente")
+     */
+    public function migracionCliente(int $oldcliente_id): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var OldClientes $OldCliente */
+        $OldCliente = $em->getRepository("App:OldClientes")->find($oldcliente_id);
+        dump("CLIENTE A CARGAR ");
+        dump($OldCliente);
+        $this->cargaCLiente($OldCliente);
+        die();
+        return new Response();
+    }
+
+    /**
+     * @param OldClientes $OldCliente
+     * @return bool
+     */
+    public function cargaCLiente(OldClientes $OldCliente)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $ControlCliente = $em->getRepository("App:Cliente")->findOneBy(["idAnterior" => $OldCliente->getClienteId()]);
+        if ($ControlCliente) {
+            $em->remove($ControlCliente);
             $em->flush();
-            $OldTratamientos = $em->getRepository("App:OldTratamientos")->findBy(["tratamientoIdcliente" => $OldCliente->getClienteId()]);
-            /** @var OldTratamientos $oldTratamiento */
-            foreach ($OldTratamientos as $oldTratamiento) {
-                if (is_null($oldTratamiento->getTratamientoFecha())) continue;
+        }
+        $Cliente = new Cliente();
+        $Cliente->setAlias($OldCliente->getClienteDs());
+        $Cliente->setNombre($OldCliente->getClienteDsnombre());
+        $Cliente->setApellido1($OldCliente->getClienteDsapellido1());
+        $Cliente->setApellido2($OldCliente->getClienteDsapellido2());
+        $Cliente->setDomicilio($OldCliente->getClienteDsdomicilio());
+        /** @var CodigoPostal $CodigoPostal */
+        $CodigoPostal = $em->getRepository("App:CodigoPostal")->findOneBy(["codigo" => $OldCliente->getClienteCdpostal()]);
+        if ($CodigoPostal) {
+            $Cliente->setCodigoPostal($CodigoPostal->getCodigo());
+            $Cliente->setLocalidad($CodigoPostal->getLocalidad());
+        }
+        $Cliente->setComentarios($OldCliente->getClienteDscomentarios());
+        is_null($OldCliente->getClienteEmail()) ? null : $Cliente->setEmail($OldCliente->getClienteEmail());
+        $Cliente->setFechaAlta($OldCliente->getClienteFcalta());
+        $Cliente->setFechaNacimiento($OldCliente->getClienteFcnacimiento());
+        $Cliente->setMovil($OldCliente->getClienteDsmovil());
+        $Cliente->setNif($OldCliente->getClienteNif());
+        $Cliente->setProfesion($OldCliente->getClienteDsprofesion());
+        is_null($OldCliente->getClienteDstelefono()) ? null : $Cliente->setTelefono($OldCliente->getClienteDstelefono());
+        $Cliente->setIdAnterior($OldCliente->getClienteId());
+        $em->persist($Cliente);
+        $em->flush();
+        dump("NUEVO CLIENTE");
+        dump($Cliente);
+        $OldTratamientos = $em->getRepository("App:OldTratamientos")->findBy(["tratamientoIdcliente" => $OldCliente->getClienteId()]);
+        dump("TRATAMIENTOS ANTERIORES");
+        dump($OldTratamientos);
+        /** @var OldTratamientos $oldTratamiento */
+        foreach ($OldTratamientos as $oldTratamiento) {
+            dump($oldTratamiento);
+            if (!is_null($oldTratamiento->getTratamientoFecha())) {
                 $Tratamiento = new Tratamiento();
                 $Tratamiento->setCliente($Cliente);
                 $Tratamiento->setDescripcion($oldTratamiento->getTratamientoDstratamiento());
@@ -91,6 +131,8 @@ class MigracionController extends AbstractController
                 $Tratamiento->setFechaTratamiento($oldTratamiento->getTratamientoFecha());
                 $em->persist($Tratamiento);
                 $em->flush();
+                dump("NUEVO TRATAMIENTO");
+                dump($Tratamiento);
                 $OldTratamientoConceptos = $em->getRepository("App:OldTratamientoConceptos")->findBy(["idtratamiento" => $oldTratamiento->getTratamientoId()]);
                 /** @var OldTratamientoConceptos $oldTratamientoConcepto */
                 foreach ($OldTratamientoConceptos as $oldTratamientoConcepto) {
@@ -98,7 +140,6 @@ class MigracionController extends AbstractController
                     $TratamientoConcepto->setTratamiento($Tratamiento);
                     $TratamientoConcepto->setUnidades($oldTratamientoConcepto->getNmunidades());
                     /** @var  $TipoTratamiento $TipoTratamiento */
-
                     $TipoTratamiento = $em->getRepository("App:TipoTratamiento")->findOneBy(["descripcion" => $oldTratamientoConcepto->getDstipotratamiento()]);
                     $TratamientoConcepto->setTipoTratamiento($TipoTratamiento);
                     $em->persist($TratamientoConcepto);
@@ -130,8 +171,11 @@ class MigracionController extends AbstractController
                     }
                 }
             }
-
         }
-        return new Response();
+
+        $OldCliente->setMigrado(1);
+        $em->persist($OldCliente);
+        $em->flush();
+        return true;
     }
 }

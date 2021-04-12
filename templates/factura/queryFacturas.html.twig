@@ -1,0 +1,60 @@
+{% extends "base.html.twig" %}
+{% block title %} CONSULTA FACTURAS {% endblock %}
+{% block titulo %}
+    <div id='dtitulo' class="container"> CONSULTA FACTURAS
+{#        <a href="#"#}
+{#           class="btn btn-success">#}
+{#            <span class="glyphicon glyphicon-new-window"></span> Nuevo Tratamiento</a>#}
+{#        <hr/>#}
+    </div>
+{% endblock %}
+
+{% block contenido %}
+    <div class="container">
+        {% for message in app.session.flashbag().get('status') %}
+            <div class="alert alert-success">
+                {{message}}
+            </div>
+            <hr/>
+        {% endfor %}
+   </div>
+
+    <div class="container">
+        <table id="tablaFacturas" class="tabla table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>Fecha</th>
+                <th>Serie</th>
+                <th>Número </th>
+                <th>Cliente </th>
+                <th>Acciones</th>
+            </tr>
+{#            <tr>#}
+{#                <th></th>#}
+{#                <th></th>#}
+{#                <th></th>#}
+{#                <th></th>#}
+{#                <th></th>#}
+{#                <th></th>#}
+{#            </tr>#}
+            </thead>
+            <tbody>
+            {% for registro in facturas %}
+                <tr>
+                    <td>{{ registro.id }}</td>
+                    <td>{{ registro.fechaFactura|date ('Y-m-d') }}</td>
+                    <td>{{ registro.serie }}</td>
+                    <td>{{ registro.numero }}</td>
+{#                    <td></td>#}
+                    <td>{{ registro.cliente.apellido1}} {{ registro.cliente.apellido2 }}, {{ registro.cliente.nombre}}</td>
+                    <td>
+                        <a href="{{ path("edit_factura",{"factura_id":registro.id}) }}">
+                            <span class="glyphicon glyphicon-edit"></span> </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

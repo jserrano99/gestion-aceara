@@ -132,6 +132,13 @@ class OldClientes
      * @ORM\Column(name="cliente_NIF", type="string", length=10, nullable=true)
      */
     private $clienteNif;
+    /**
+     * @var integer|null
+     *
+     * @ORM\Column(name="migrado", type="integer")
+     */
+    private $migrado;
+
 
     /**
      * @return int
@@ -403,6 +410,22 @@ class OldClientes
     public function setClienteNif(?string $clienteNif): void
     {
         $this->clienteNif = $clienteNif;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMigrado(): ?int
+    {
+        return $this->migrado;
+    }
+
+    /**
+     * @param int|null $migrado
+     */
+    public function setMigrado(?int $migrado): void
+    {
+        $this->migrado = $migrado;
     }
 
 

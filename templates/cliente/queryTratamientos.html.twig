@@ -1,7 +1,7 @@
 {% extends "base.html.twig" %}
 {% block title %} CONSULTA TRATAMIENTOS {% endblock %}
 {% block titulo %}
-    <div id='dtitulo' class="container"> CONSULTA TRATAMIENTOS
+    <div id='dtitulo' class="container"> CONSULTA TRATAMIENTOS {{ cliente.alias }}
         <a href="#"
            class="btn btn-success">
             <span class="glyphicon glyphicon-new-window"></span> Nuevo Tratamiento</a>
@@ -17,6 +17,33 @@
             </div>
             <hr/>
         {% endfor %}
-{#        {{ sg_datatables_render(datatable) }}#}
+   </div>
+
+    <div class="container">
+        <table id="tablaTratamientos" class="tabla table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>Fecha</th>
+                <th>Motivo Consulta</th>
+                <th>Tratamiento </th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for registro in tratamientos %}
+                <tr>
+                    <td>{{ registro.id }}</td>
+                    <td>{{ registro.fechaTratamiento|date ('d-m-Y') }}</td>
+                    <td>{{ registro.motivoConsulta }}</td>
+                    <td>{{ registro.descripcion }}</td>
+                    <td>
+                        <a href="{{ path("edit_tratamiento",{"tratamiento_id":registro.id}) }}">
+                            <span class="glyphicon glyphicon-search"></span> </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 {% endblock %}
