@@ -1,0 +1,153 @@
+{% extends "base.html.twig" %}
+{% block title %} MODIFICACIÓN DE CLIENTE {% endblock %}
+{% block titulo %}
+    <div id='dtitulo' class="container">
+        <a href="{{ path("add_cliente") }}"
+           class="btn btn-success">
+            <span class="glyphicon glyphicon-new-window"></span> Nuevo Cliente</a>
+        <a href="{{ path("query_cliente") }}"
+           class="btn btn-warning">
+            <span class="glyphicon glyphicon-refresh"></span> Volver</a>
+        <hr/>
+
+    </div>
+{% endblock %}
+
+{% block contenido %}
+    <script>
+        $(document).ready(function () {
+            $("#formCliente_deleteCliente").click(function () {
+                bootbox.confirm({
+                    message: "Se eliminarán todos los datos del Cliente, ¿Está Seguro?",
+                    buttons: {
+                        confirm: {
+                            label: 'Confirmar',
+                            className: 'btn-danger'
+                        },
+                        cancel: {
+                            label: 'Cancelar',
+                            className: 'btn-success'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            let recurso;
+                            let id;
+                            id = $("#formCliente_id").val();
+                            recurso = "../delete/"+id;
+                            window.location = recurso;
+                        }
+                        ;
+                    }
+                });
+            });
+        });
+    </script>
+    <div class="container">
+        {{ form_start (form,{'action':'','method':'POST'}) }}
+        {{ form_errors(form) }}
+
+        <div class="panel panel-default">
+            <div class="panel-heading"> Identificación del Cliente</div>
+            <div class="panel-body">
+                <div class="form-row">
+                    <div class="form-group col-md-2"> {{ form_row(form.id) }}</div>
+                    <div class="form-group col-md-10"> {{ form_row(form.alias) }}</div>
+                </div>
+            </div>
+        </div>
+        <div id="tabs" class="pestana container">
+            <ul class="nav nav-tabs">
+                <li><a id="t1" href="#datosPersonales">Datos Personales</a></li>
+                <li><a id="t2" href="#domicilio">Domicilio</a></li>
+                <li><a id="t3" href="#profesion">Profesión</a></li>
+                <li><a id="t4" href="#otrosDatos">Otros Datos</a></li>
+                <li><a id="t5" href="#tratamientos">Tratamientos</a></li>
+                <li><a id="t6" href="#facturas">Facturas</a></li>
+                <li><a id="t7" href="#comentario">Comentario</a></li>
+            </ul>
+            <div id="datosPersonales">
+                <div class="form_row ">{{ form_row(form.nif) }}</div>
+                <div class="form_row ">{{ form_row(form.nombre) }}</div>
+                <div class="form_row ">{{ form_row(form.apellido1) }}</div>
+                <div class="form_row ">{{ form_row(form.apellido2) }}</div>
+                <div class="form_row ">{{ form_row(form.fechaNacimiento) }}</div>
+                <div class="form_row ">{{ form_row(form.fechaAlta) }}</div>
+            </div>
+            <div id="domicilio">
+                <div class="form_row ">{{ form_row(form.domicilio) }}</div>
+                <div class="form_row ">{{ form_row(form.codigoPostal) }}</div>
+                {% if  cliente.localidad %}
+                    <h4> Localidad : {{ cliente.localidad.codigo }} {{ cliente.localidad.descripcion }}</h4>
+                    <h4> Provincia
+                        : {{ cliente.localidad.provincia.id }} {{ cliente.localidad.provincia.descripcion }}</h4>
+                {% endif %}
+
+            </div>
+            <div id="profesion">
+                <div class="form_row ">{{ form_row(form.profesion) }}</div>
+            </div>
+            <div id="otrosDatos">
+                <div class="form_row ">{{ form_row(form.email) }}</div>
+                <div class="form_row ">{{ form_row(form.movil) }}</div>
+                <div class="form_row ">{{ form_row(form.telefono) }}</div>
+            </div>
+            <div id="tratamientos">
+                <table id="tratamientosTabla" class="tabla table table-striped table-bordered" style="width:100%">
+                    <thead>
+                    <tr>
+                        <th style="width: auto">id</th>
+                        <th style="width: auto">Fecha</th>
+                        <th style="width: auto">Motivo Consulta</th>
+                        <th style="width: auto">Tratamiento</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for tratamiento in cliente.tratamientos %}
+                        <tr>
+                            <td style="width: auto">{{ tratamiento.id is empty ? "" :  tratamiento.id }}</td>
+                            <td style="width: 100px">{{ tratamiento.fechaTratamiento is empty ? "": tratamiento.fechaTratamiento|date('d-m-Y') }}</td>
+                            <td style="width: auto">{{ tratamiento.motivoConsulta }}</td>
+                            <td style="width: auto">{{ tratamiento.descripcion }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="facturas">
+                <table id="facturasTabla" class="tabla table table-striped table-bordered" style="width:100%">
+                    <thead>
+                    <tr>
+                        <th style="width: auto">id</th>
+                        <th style="width: auto">Fecha</th>
+                        <th style="width: auto">Serie</th>
+                        <th style="width: auto">Número</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for factura in cliente.facturas %}
+                        <tr>
+                            <td>{{ factura.id is empty ? "" :  factura.id }}</td>
+                            <td>{{ factura.fechaFactura is empty ? "": factura.fechaFactura|date('d-m-Y') }}</td>
+                            <td>{{ factura.serie }}</td>
+                            <td>{{ factura.numero }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="comentario">
+                <div class="form_row">{{ form_row(form.comentarios) }}</div>
+            </div>
+        </div>
+        <br>
+        <div class="form-row">
+            <div class="form-group col-md-1">{{ form_row(form.Guardar) }}</div>
+            <div class="form-group col-md-2">{{ form_row(form.deleteCliente) }}</div>
+        </div>
+        {{ form_end (form) }}
+    </div>
+
+{% endblock %}

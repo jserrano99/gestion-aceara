@@ -245,7 +245,7 @@ class Cliente
         return $this->telefono;
     }
 
-    public function setTelefono(string $telefono): self
+    public function setTelefono(?string $telefono): self
     {
         $this->telefono = $telefono;
 
@@ -257,7 +257,11 @@ class Cliente
         return $this->email;
     }
 
-    public function setEmail(string $email): self
+    /**
+     * @param string $email
+     * @return $this
+     */
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
 
@@ -269,7 +273,11 @@ class Cliente
         return $this->fechaAlta;
     }
 
-    public function setFechaAlta(?\DateTimeInterface $fechaAlta): self
+    /**
+     * @param$fechaAlta
+     * @return $this
+     */
+    public function setFechaAlta(?\DateTime  $fechaAlta): self
     {
         $this->fechaAlta = $fechaAlta;
 
@@ -333,7 +341,7 @@ class Cliente
     /**
      * @return Collection|Tratamiento[]
      */
-    public function getTratamientos(): Collection
+    public function getTratamientos(): ?Collection
     {
         return $this->tratamientos;
     }

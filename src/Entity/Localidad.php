@@ -155,5 +155,8 @@ class Localidad
         $this->codigo = $codigo;
     }
 
-
+    public function __toString()
+    {
+        return $this->getDescripcion();
+    }
 }

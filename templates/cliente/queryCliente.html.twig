@@ -2,7 +2,7 @@
 {% block title %} CONSULTA CLIENTES {% endblock %}
 {% block titulo %}
     <div id='dtitulo' class="container"> CONSULTA CLIENTES
-        <a href="#"
+        <a href="{{ path('add_cliente') }}"
            class="btn btn-success">
             <span class="glyphicon glyphicon-new-window"></span> Nuevo Cliente</a>
         <hr/>
@@ -13,7 +13,20 @@
     <script>
 
     </script>
-
+    <div class="container">
+        {% for message in app.session.flashbag().get('info') %}
+            <div class="alert alert-info">
+                {{message}}
+            </div>
+            <hr/>
+        {% endfor %}
+        {% for message in app.session.flashbag().get('error') %}
+            <div class="alert alert-danger">
+                {{message}}
+            </div>
+            <hr/>
+        {% endfor %}
+    </div>
     <div class="container">
         <table id="tablaClientes" class="tabla table table-striped table-bordered">
             <thead>
@@ -35,7 +48,9 @@
                     <td>{{ registro.apellido1 }}</td>
                     <td>{{ registro.apellido2 }}</td>
                     <td>
-                        <a href="{{ path("query_tratamientos",{"cliente_id":registro.id}) }}">
+                        <a data-toggle="tooltip" title=" Editar Cliente"href="{{ path("edit_cliente",{"cliente_id":registro.id}) }}">
+                            <span class="glyphicon glyphicon-edit"></span> </a>
+                        <a data-toggle="tooltip" title=" Consultar Tratamientos" href="{{ path("query_tratamientos",{"cliente_id":registro.id}) }}">
                             <span class="glyphicon glyphicon-search"></span> </a>
                     </td>
                 </tr>
