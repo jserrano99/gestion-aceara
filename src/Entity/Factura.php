@@ -41,7 +41,7 @@ class Factura
     private $cliente;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Tratamiento::class, inversedBy="facturas")
+     * @ORM\OneToOne(targetEntity=Tratamiento::class, inversedBy="factura")
      */
     private $tratamiento;
 

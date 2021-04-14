@@ -138,10 +138,13 @@ class MigracionController extends AbstractController
                 foreach ($OldTratamientoConceptos as $oldTratamientoConcepto) {
                     $TratamientoConcepto = new TratamientoConcepto();
                     $TratamientoConcepto->setTratamiento($Tratamiento);
+                    $TratamientoConcepto->setDescripcion($oldTratamientoConcepto->getDstipotratamiento());
                     $TratamientoConcepto->setUnidades($oldTratamientoConcepto->getNmunidades());
-                    /** @var  $TipoTratamiento $TipoTratamiento */
-                    $TipoTratamiento = $em->getRepository("App:TipoTratamiento")->findOneBy(["descripcion" => $oldTratamientoConcepto->getDstipotratamiento()]);
-                    $TratamientoConcepto->setTipoTratamiento($TipoTratamiento);
+                    $TratamientoConcepto->setImporteUnitario($oldTratamientoConcepto->getNmimporteunitario());
+                    $TratamientoConcepto->setImporteConcepto($oldTratamientoConcepto->getNmimporteconcepto());
+                    $TratamientoConcepto->setImporteTotal($oldTratamientoConcepto->getNmimportetotal());
+                    $TratamientoConcepto->setCuotaIva(round($oldTratamientoConcepto->getNmimporteconcepto()*0.21,2));
+                    $TratamientoConcepto->setPorcentajeIva($oldTratamientoConcepto->getNmiva());
                     $em->persist($TratamientoConcepto);
                     $em->flush();
                 }

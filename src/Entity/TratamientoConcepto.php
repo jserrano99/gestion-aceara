@@ -23,12 +23,38 @@ class TratamientoConcepto
     private $unidades;
 
     /**
-     * @ORM\ManyToOne(targetEntity=TipoTratamiento::class, inversedBy="tratamiento")
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private $tipoTratamiento;
+    private $descripcion;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Tratamiento::class)
+     * @ORM\Column(type="float", nullable=false)
+     */
+    private $importeUnitario;
+
+    /**
+     * @ORM\Column(type="float", nullable=false)
+     */
+    private $importeConcepto;
+
+    /**
+     * @ORM\Column(type="float", nullable=false)
+     */
+    private $porcentajeIva;
+
+    /**
+     * @ORM\Column(type="float", nullable=false)
+     */
+    private $cuotaIva;
+
+    /**
+     * @ORM\Column(type="float", nullable=false)
+     */
+    private $importeTotal;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Tratamiento::class, inversedBy="conceptos")
      */
     private $tratamiento;
 
@@ -49,18 +75,6 @@ class TratamientoConcepto
         return $this;
     }
 
-    public function getTipoTratamiento(): ?TipoTratamiento
-    {
-        return $this->tipoTratamiento;
-    }
-
-    public function setTipoTratamiento(?TipoTratamiento $tipoTratamiento): self
-    {
-        $this->tipoTratamiento = $tipoTratamiento;
-
-        return $this;
-    }
-
     public function getTratamiento(): ?Tratamiento
     {
         return $this->tratamiento;
@@ -72,4 +86,102 @@ class TratamientoConcepto
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getDescripcion()
+    {
+        return $this->descripcion;
+    }
+
+    /**
+     * @param mixed $descripcion
+     */
+    public function setDescripcion($descripcion): void
+    {
+        $this->descripcion = $descripcion;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImporteUnitario()
+    {
+        return $this->importeUnitario;
+    }
+
+    /**
+     * @param mixed $importeUnitario
+     */
+    public function setImporteUnitario($importeUnitario): void
+    {
+        $this->importeUnitario = $importeUnitario;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImporteConcepto()
+    {
+        return $this->importeConcepto;
+    }
+
+    /**
+     * @param mixed $importeConcepto
+     */
+    public function setImporteConcepto($importeConcepto): void
+    {
+        $this->importeConcepto = $importeConcepto;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPorcentajeIva()
+    {
+        return $this->porcentajeIva;
+    }
+
+    /**
+     * @param mixed $porcentajeIva
+     */
+    public function setPorcentajeIva($porcentajeIva): void
+    {
+        $this->porcentajeIva = $porcentajeIva;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCuotaIva()
+    {
+        return $this->cuotaIva;
+    }
+
+    /**
+     * @param mixed $cuotaIva
+     */
+    public function setCuotaIva($cuotaIva): void
+    {
+        $this->cuotaIva = $cuotaIva;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImporteTotal()
+    {
+        return $this->importeTotal;
+    }
+
+    /**
+     * @param mixed $importeTotal
+     */
+    public function setImporteTotal($importeTotal): void
+    {
+        $this->importeTotal = $importeTotal;
+    }
+    
+    
 }

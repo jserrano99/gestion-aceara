@@ -1,0 +1,40 @@
+{% extends "base.html.twig" %}
+{% block title %} MODIFICACIÓN DE CLIENTE {% endblock %}
+{% block titulo %}
+
+{% endblock %}
+
+{% block contenido %}
+    <script>
+        $(document).ready(function () {
+            $("#addConcepto").modal('show');
+
+            $("#cerrarVentana").click(function () {
+                $("#addConcepto").modal('hide');
+            });
+        });
+    </script>
+
+    <div id="addConcepto" class="modal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="panel panel-default">
+                <div class="panel-heading"> Identificación del Cliente</div>
+                <div class="panel-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-2"> {{ cliente.id }}</div>
+                        <div class="form-group col-md-10"> {{ cliente.alias }}</div>
+                        <div class="form-group col-md-10"> {{ tratamiento.id }}</div>
+                        <div class="form-group col-md-10"> {{ tratamiento.fechaTratamiento |date ('d-m-Y') }}</div>
+                    </div>
+                </div>
+
+                <div class="modal-content">
+                <div class="modal-body" text-align="center">
+                    {{ form_start (form,{'action':'','method':'POST'}) }}
+                    {{ form_errors(form) }}
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

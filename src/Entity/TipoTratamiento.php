@@ -36,97 +36,74 @@ class TipoTratamiento
     private $tipoIva;
 
     /**
-     * @ORM\OneToMany(targetEntity=Tratamiento::class, mappedBy="tipoTratamiento")
+     * @return mixed
      */
-    private $tratamientos;
-
-    /**
-     * @ORM\OneToMany(targetEntity=TratamientoConcepto::class, mappedBy="tipoTratamiento")
-     */
-    private $tratamiento;
-
-    public function __construct()
-    {
-        $this->tratamientos = new ArrayCollection();
-        $this->tratamiento = new ArrayCollection();
-    }
-
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }
 
-    public function getDescripcion(): ?string
+    /**
+     * @param mixed $id
+     */
+    public function setId($id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDescripcion()
     {
         return $this->descripcion;
     }
 
-    public function setDescripcion(string $descripcion): self
+    /**
+     * @param mixed $descripcion
+     */
+    public function setDescripcion($descripcion): void
     {
         $this->descripcion = $descripcion;
-
-        return $this;
     }
 
-    public function getImporte(): ?float
+    /**
+     * @return mixed
+     */
+    public function getImporte()
     {
         return $this->importe;
     }
 
-    public function setImporte(float $importe): self
+    /**
+     * @param mixed $importe
+     */
+    public function setImporte($importe): void
     {
         $this->importe = $importe;
-
-        return $this;
     }
 
-    public function getTipoIva(): ?TipoIva
+    /**
+     * @return mixed
+     */
+    public function getTipoIva()
     {
         return $this->tipoIva;
     }
 
-    public function setTipoIva(?TipoIva $tipoIva): self
+    /**
+     * @param mixed $tipoIva
+     */
+    public function setTipoIva($tipoIva): void
     {
         $this->tipoIva = $tipoIva;
-
-        return $this;
     }
 
-    /**
-     * @return Collection|Tratamiento[]
-     */
-    public function getTratamientos(): Collection
+
+    public function __toString()
     {
-        return $this->tratamientos;
+        return $this->descripcion;   // TODO: Implement __toString() method.
     }
 
-    public function addTratamiento(Tratamiento $tratamiento): self
-    {
-        if (!$this->tratamientos->contains($tratamiento)) {
-            $this->tratamientos[] = $tratamiento;
-            $tratamiento->setTipoTratamiento($this);
-        }
 
-        return $this;
-    }
-
-    public function removeTratamiento(Tratamiento $tratamiento): self
-    {
-        if ($this->tratamientos->removeElement($tratamiento)) {
-            // set the owning side to null (unless already changed)
-            if ($tratamiento->getTipoTratamiento() === $this) {
-                $tratamiento->setTipoTratamiento(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|TratamientoConcepto[]
-     */
-    public function getTratamiento(): Collection
-    {
-        return $this->tratamiento;
-    }
 }

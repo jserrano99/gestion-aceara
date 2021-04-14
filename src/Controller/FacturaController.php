@@ -34,4 +34,28 @@ class FacturaController extends AbstractController
             'controller_name' => 'FacturaController',
         ]);
     }
+
+    /**
+     * @Route("/factura/ver/{factura_id}", name="ver_factura")
+     * @param int $factura_id
+     * @return Response
+     */
+    public function verFactura(int $factura_id): Response
+    {
+        return $this->render('factura/index.html.twig', [
+            'controller_name' => 'FacturaController',
+        ]);
+    }
+
+    /**
+     * @Route("/factura/generar/{tratamiento_id}", name="generar_factura")
+     * @param int $tratamiento_id
+     * @return Response
+     */
+    public function generarFactura(int $tratamiento_id): Response
+    {
+        return $this->render('factura/index.html.twig', [
+            'controller_name' => 'FacturaController',
+        ]);
+    }
 }

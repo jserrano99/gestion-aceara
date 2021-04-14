@@ -100,15 +100,12 @@ class ClienteType extends AbstractType
                     'class' => 'form-control corto',
                     'data-date-format' => 'dd-mm-yyyy',
                     'data-class' => 'string']])
-
             ->add('nif', TextType::class, [
                 "label" => 'NIF',
                 "required" => false,
                 "attr" => ["class" => "form-control"
                 ]])
             ->add('idAnterior', HiddenType::class)
-//            ->add('localidad', HiddenType::class)
-
             ->add('deleteCliente', ButtonType::class, [
                 'label' => 'Eliminar ',
                 "attr" => ["class" => "btn btn-t btn-danger"]])

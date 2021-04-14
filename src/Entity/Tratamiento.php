@@ -34,34 +34,25 @@ class Tratamiento
      */
     private $descripcion;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
+     /**
+     * @ORM\OneToOne(targetEntity=Factura::class, mappedBy="tratamiento")
      */
-    private $unidades;
+    private $factura;
 
     /**
-     * @ORM\Column(type="float", nullable=true)
-     */
-    private $importe;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=TipoTratamiento::class, inversedBy="tratamientos")
-     */
-    private $tipoTratamiento;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Factura::class, mappedBy="tratamiento")
-     */
-    private $facturas;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Cliente::class, inversedBy="tratamientos")
+     * @ORM\ManyToOne(targetEntity=Cliente::class, inversedBy="tratamientos", cascade={"remove"})
      */
     private $cliente;
 
+    /**
+     * @ORM\OneToMany(targetEntity=TratamientoConcepto::class, mappedBy="tratamiento")
+     */
+    private $conceptos;
+
+
     public function __construct()
     {
-        $this->facturas = new ArrayCollection();
+        $this->factura = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -142,33 +133,19 @@ class Tratamiento
     }
 
     /**
-     * @return Collection|Factura[]
+     * @return Factura
      */
-    public function getFacturas(): Collection
+    public function getFactura(): ? Factura
     {
-        return $this->facturas;
+        return $this->factura;
     }
 
-    public function addFactura(Factura $factura): self
+    /**
+     * @param Factura $factura
+     */
+    public function setFactura(?Factura $factura): void
     {
-        if (!$this->facturas->contains($factura)) {
-            $this->facturas[] = $factura;
-            $factura->setTratamiento($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFactura(Factura $factura): self
-    {
-        if ($this->facturas->removeElement($factura)) {
-            // set the owning side to null (unless already changed)
-            if ($factura->getTratamiento() === $this) {
-                $factura->setTratamiento(null);
-            }
-        }
-
-        return $this;
+        $this->factura = $factura;
     }
 
     /**
@@ -183,6 +160,14 @@ class Tratamiento
     public function setCliente(?Cliente $cliente)
     {
         $this->cliente = $cliente;
+    }
+
+    /**
+     * @return Collection|TratamientoConcepto[]
+     */
+    public function getConceptos(): Collection
+    {
+        return $this->conceptos;
     }
 
 

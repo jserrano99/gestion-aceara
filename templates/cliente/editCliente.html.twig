@@ -34,7 +34,7 @@
                             let recurso;
                             let id;
                             id = $("#formCliente_id").val();
-                            recurso = "../delete/"+id;
+                            recurso = Routing.generate("delete_cliente", {"cliente_id": id}, true);
                             window.location = recurso;
                         }
                         ;
@@ -93,6 +93,9 @@
                 <div class="form_row ">{{ form_row(form.telefono) }}</div>
             </div>
             <div id="tratamientos">
+                <a href="{{ path("add_tratamiento",{'cliente_id':cliente.id}) }}"
+                   class="btn btn-info">
+                    <span class="glyphicon glyphicon-new-window"></span> Añadir Tratamiento</a>
                 <table id="tratamientosTabla" class="tabla table table-striped table-bordered" style="width:100%">
                     <thead>
                     <tr>
@@ -100,6 +103,8 @@
                         <th style="width: auto">Fecha</th>
                         <th style="width: auto">Motivo Consulta</th>
                         <th style="width: auto">Tratamiento</th>
+                        <th style="width: auto">Acciones</th>
+
                     </tr>
                     </thead>
                     <tbody>
@@ -109,6 +114,16 @@
                             <td style="width: 100px">{{ tratamiento.fechaTratamiento is empty ? "": tratamiento.fechaTratamiento|date('d-m-Y') }}</td>
                             <td style="width: auto">{{ tratamiento.motivoConsulta }}</td>
                             <td style="width: auto">{{ tratamiento.descripcion }}</td>
+                            <td style="width: 115px">
+                                <a data-toggle="tooltip" title=" Editar Tratamiento"
+                                   href="{{ path("edit_tratamiento",{'tratamiento_id':tratamiento.id}) }}"
+                                   class="btn btn-warning">
+                                    <span class="glyphicon glyphicon-edit"></span></a>
+                                <a data-toggle="tooltip" title=" Borrar Tratamiento"
+                                   href="{{ path("delete_tratamiento",{'tratamiento_id':tratamiento.id}) }}"
+                                   class="btn btn-danger">
+                                    <span class="glyphicon glyphicon-trash"></span></a>
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>
