@@ -36,6 +36,12 @@ class FacturaLinea
     /**
      * @ORM\Column(type="float")
      */
+    private $importeConcepto;
+
+
+    /**
+     * @ORM\Column(type="float")
+     */
     private $cuotaIva;
 
     /**
@@ -44,9 +50,16 @@ class FacturaLinea
     private $importeTotal;
 
     /**
+     * @ORM\Column(type="float")
+     */
+    private $porcentajeIva;
+
+    /**
      * @ORM\Column(type="integer")
      */
     private $unidades;
+
+
 
     public function getId(): ?int
     {
@@ -124,4 +137,40 @@ class FacturaLinea
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPorcentajeIva()
+    {
+        return $this->porcentajeIva;
+    }
+
+    /**
+     * @param mixed $porcentajeIva
+     */
+    public function setPorcentajeIva($porcentajeIva): void
+    {
+        $this->porcentajeIva = $porcentajeIva;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImporteConcepto()
+    {
+        return $this->importeConcepto;
+    }
+
+    /**
+     * @param mixed $importeConcepto
+     */
+    public function setImporteConcepto($importeConcepto): void
+    {
+        $this->importeConcepto = $importeConcepto;
+    }
+
+
+
+
 }

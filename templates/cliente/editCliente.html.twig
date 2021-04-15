@@ -43,6 +43,7 @@
             });
         });
     </script>
+
     <div class="container">
         {{ form_start (form,{'action':'','method':'POST'}) }}
         {{ form_errors(form) }}
@@ -114,15 +115,21 @@
                             <td style="width: 100px">{{ tratamiento.fechaTratamiento is empty ? "": tratamiento.fechaTratamiento|date('d-m-Y') }}</td>
                             <td style="width: auto">{{ tratamiento.motivoConsulta }}</td>
                             <td style="width: auto">{{ tratamiento.descripcion }}</td>
-                            <td style="width: 115px">
+                            <td style="width: 135px">
                                 <a data-toggle="tooltip" title=" Editar Tratamiento"
                                    href="{{ path("edit_tratamiento",{'tratamiento_id':tratamiento.id}) }}"
-                                   class="btn btn-warning">
+                                   class="btn btn-warning btn-sm">
                                     <span class="glyphicon glyphicon-edit"></span></a>
                                 <a data-toggle="tooltip" title=" Borrar Tratamiento"
                                    href="{{ path("delete_tratamiento",{'tratamiento_id':tratamiento.id}) }}"
-                                   class="btn btn-danger">
+                                   class="btn btn-danger btn-sm">
                                     <span class="glyphicon glyphicon-trash"></span></a>
+                                {% if tratamiento.factura is not null %}
+                                    <a data-toggle="tooltip" title=" Ver Factura"
+                                       href="{{ path("ver_factura",{'factura_id':tratamiento.factura.id}) }}"
+                                       class="btn btn-info btn-sm">
+                                        <span class="glyphicon glyphicon-euro"></span></a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}

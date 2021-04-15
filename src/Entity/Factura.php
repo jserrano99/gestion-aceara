@@ -46,7 +46,22 @@ class Factura
     private $tratamiento;
 
     /**
-     * @ORM\OneToMany(targetEntity=FacturaLinea::class, mappedBy="factura", orphanRemoval=true)
+     * @ORM\Column(type="float")
+     */
+    private $totalConcepto;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $totalCuotaIva;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $totalfactura;
+
+    /**
+     * @ORM\OneToMany(targetEntity=FacturaLinea::class, mappedBy="factura")
      */
     private $facturaLineas;
 
@@ -149,4 +164,54 @@ class Factura
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getTotalConcepto()
+    {
+        return $this->totalConcepto;
+    }
+
+    /**
+     * @param mixed $totalConcepto
+     */
+    public function setTotalConcepto($totalConcepto): void
+    {
+        $this->totalConcepto = $totalConcepto;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTotalCuotaIva()
+    {
+        return $this->totalCuotaIva;
+    }
+
+    /**
+     * @param mixed $totalCuotaIva
+     */
+    public function setTotalCuotaIva($totalCuotaIva): void
+    {
+        $this->totalCuotaIva = $totalCuotaIva;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTotalfactura()
+    {
+        return $this->totalfactura;
+    }
+
+    /**
+     * @param mixed $totalfactura
+     */
+    public function setTotalfactura($totalfactura): void
+    {
+        $this->totalfactura = $totalfactura;
+    }
+
+
 }

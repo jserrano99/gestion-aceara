@@ -1,0 +1,122 @@
+{% extends "base.html.twig" %}
+{% block title %} CONSULTA DE FACTURAS  DE CLIENTE {% endblock %}
+{% block titulo %}
+    <div id='dtitulo' class="container">
+        CONSULTA DE FACTURA
+        {#        <a href="{{ path("add_cliente") }}"#}
+        {#           class="btn btn-success">#}
+        {#            <span class="glyphicon glyphicon-new-window"></span> Nuevo Cliente</a>#}
+        {#        <a href="{{ path("query_cliente") }}"#}
+        {#           class="btn btn-warning">#}
+        {#            <span class="glyphicon glyphicon-refresh"></span> Volver</a>#}
+        {#        <hr/>#}
+    </div>
+{% endblock %}
+
+{% block contenido %}
+    <script>
+        $(document).ready(function () {
+            $("#formFactura_deleteFactura").click(function () {
+                bootbox.confirm({
+                    message: "Se eliminará la Factura, ¿Está Seguro?",
+                    buttons: {
+                        confirm: {
+                            label: 'Confirmar',
+                            className: 'btn-danger'
+                        },
+                        cancel: {
+                            label: 'Cancelar',
+                            className: 'btn-success'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            let recurso;
+                            let id;
+                            id = $("#formFactura_id").val();
+                            recurso = Routing.generate("delete_factura", {"factura_id": id}, true);
+                            window.location = recurso;
+                        }
+                        ;
+                    }
+                });
+            });
+        });
+    </script>
+    <div class="container">
+        {{ form_start (form,{'action':'','method':'POST'}) }}
+        {{ form_errors(form) }}
+        <div class="panel panel-default">
+            <div class="panel-heading"> Datos del Cliente</div>
+            <div class="panel-body">
+                <h4>
+                <div class="form-row">
+                    <div class="form-row btn-t"> NIF: {{ factura.cliente.nif }}</div>
+                    <div class="form-row btn-t"> NOMBRE: {{ factura.cliente|upper}}</div>
+                    <div class="form-row btn-t"> DOMICILIO: {{ factura.cliente.domicilio|upper }} {{ factura.cliente.codigoPostal }} {{ factura.cliente.localidad.descripcion| upper }}</div>
+                    <div class="form-row btn-t"> TRATAMIENTO: {{ factura.tratamiento.id }} Fecha: {{ factura.tratamiento.fechaTratamiento|date('d-m-Y') }}</div>
+                </div>
+                </h4>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading"> Datos de la Factura</div>
+            <div class="panel-body">
+                <div class="form-row">
+                    <div class="form-group col-md-2"> {{ form_row(form.id) }}</div>
+                    <div class="form-group col-md-2"> {{ form_row(form.numero) }}</div>
+                    <div class="form-group col-md-2"> {{ form_row(form.serie) }}</div>
+                    <div class="form-group col-md-2"> {{ form_row(form.fechaFactura) }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading"> Conceptos</div>
+            <div class="panel-body">
+                <table id="tratamientosTabla" class="tabla3 table table-striped table-bordered" style="width:100%">
+                    <thead>
+                    <tr>
+                        <th style="width: auto">id</th>
+                        <th style="width: auto">Concepto</th>
+                        <th style="width: auto">Unidades</th>
+                        <th style="width: auto">Importe Unitario</th>
+                        <th style="width: auto">Importe Concepto</th>
+                        <th style="width: auto">% IVA</th>
+                        <th style="width: auto">Cuota Iva</th>
+                        <th style="width: auto">Total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for lineafactura in lineas %}
+                        <tr>
+                            <td style="width: auto">{{ lineafactura.id }}</td>
+                            <td style="width: 100px">{{ lineafactura.concepto }}</td>
+                            <td style="width: auto">{{ lineafactura.unidades }}</td>
+                            <td style="width: auto">{{ lineafactura.importeUnitario| number_format(2,',','.') }} € </td>
+                            <td style="width: auto">{{ lineafactura.importeConcepto |number_format(2,',','.') }} € </td>
+                            <td style="width: auto">{{ lineafactura.porcentajeIva | number_format(2,',','.') }} %</td>
+                            <td style="width: auto">{{ lineafactura.cuotaIva | number_format(2,',','.') }} € </td>
+                            <td style="width: auto;text-align: right">{{ lineafactura.importeTotal |number_format(2,',','.') }} € </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td style=" font-weight:bold;text-align:right" colspan="4">Totales</td>
+                        <td style="width: auto">{{ factura.totalConcepto |number_format(2,',','.') }} € </td>
+                        <td style="width: auto"></td>
+                        <td style="width: auto">{{ factura.totalCuotaIva | number_format(2,',','.') }} € </td>
+                        <td style="width: auto;text-align: right">{{ factura.totalfactura|number_format(2,',','.') }} € </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-1">{{ form_row(form.Guardar) }}</div>
+            <div class="form-group col-md-2">{{ form_row(form.deleteFactura) }}</div>
+        </div>
+        {{ form_end (form) }}
+    </div>
+
+{% endblock %}

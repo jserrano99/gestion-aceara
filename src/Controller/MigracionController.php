@@ -129,6 +129,7 @@ class MigracionController extends AbstractController
                 $Tratamiento->setDescripcion($oldTratamiento->getTratamientoDstratamiento());
                 $Tratamiento->setMotivoConsulta($oldTratamiento->getTratamientoDsmotivo());
                 $Tratamiento->setFechaTratamiento($oldTratamiento->getTratamientoFecha());
+                $Tratamiento->setFactura(null);
                 $em->persist($Tratamiento);
                 $em->flush();
                 dump("NUEVO TRATAMIENTO");
@@ -157,8 +158,14 @@ class MigracionController extends AbstractController
                     $Factura->setFechaFactura($oldFactura->getFcfactura());
                     $Factura->setNumero($oldFactura->getNmfactura());
                     $Factura->setSerie($oldFactura->getSerie());
+                    $Factura->setTotalfactura(0);$Factura->setTotalConcepto(0);
+                    $Factura->setTotalCuotaIva(0);
+                    $Factura->setTotalfactura(0);
                     $em->persist($Factura);
                     $em->flush();
+                    $totalConcepto = 0;
+                    $totalCuotaIva = 0;
+                    $totalfactura = 0;
                     $OldFacturaLineas = $em->getRepository("App:OldFacturaLinea")->findBy(["idfactura" => $oldFactura->getIdfactura()]);
                     /** @var OldFacturaLinea $oldFacturaLinea */
                     foreach ($OldFacturaLineas as $oldFacturaLinea) {
@@ -169,9 +176,20 @@ class MigracionController extends AbstractController
                         $FacturaLinea->setCuotaIva($oldFacturaLinea->getNmcuotaiva());
                         $FacturaLinea->setImporteTotal($oldFacturaLinea->getNmimportetotal());
                         $FacturaLinea->setImporteUnitario($oldFacturaLinea->getNmimporteunitario());
+                        $FacturaLinea->setImporteConcepto($oldFacturaLinea->getNmimporteconcepto());
+                        $FacturaLinea->setPorcentajeIva($oldFacturaLinea->getNmiva());
                         $em->persist($FacturaLinea);
                         $em->flush();
+                        $totalConcepto = $totalConcepto + $FacturaLinea->getImporteConcepto();
+                        $totalCuotaIva = $totalCuotaIva + $FacturaLinea->getCuotaIva();
+                        $totalfactura = $totalfactura + $FacturaLinea->getImporteTotal();
                     }
+                    $Factura->setTotalConcepto($totalConcepto);
+                    $Factura->setTotalCuotaIva($totalCuotaIva);
+                    $Factura->setTotalfactura($totalfactura);
+                    $em->persist($Factura);
+                    $em->flush();
+
                 }
             }
         }

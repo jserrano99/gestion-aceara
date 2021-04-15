@@ -31,6 +31,18 @@
     }
 
     $(function () {
+        $('.tabla3').dataTable({
+            "language": {"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"},
+            "autoWidth": true,
+            "jQueryUI": false,
+            "stateSave": true,
+            "order": [[0, "desc"]],
+            dom: '',
+            columnDefs:[{
+                targets: "_all",
+                sortable: true
+            }],
+        });
         $('.tabla').dataTable({
             "language": {"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"},
             "autoWidth": true,
@@ -145,6 +157,16 @@
         {#            </button>#}
         <h3>{% block titulo %}{% endblock %}</h3>
     </div>
+    {% block mensajes %}
+    <div class="container">
+        {% for message in app.session.flashbag().get('info') %}
+            <div class="alert alert-info">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.session.flashbag().get('error') %}
+            <div class="alert alert-danger"> {{ message }} </div>
+        {% endfor %}
+    </div>
+    {% endblock %}
     {% block contenido %}
         <div class="container-fluid" style="align-content: center">
             <img src="{{ asset("build/logoAceara.jpg") }}" alt="ACME logo">

@@ -34,7 +34,7 @@ class Tratamiento
      */
     private $descripcion;
 
-     /**
+    /**
      * @ORM\OneToOne(targetEntity=Factura::class, mappedBy="tratamiento")
      */
     private $factura;
@@ -135,7 +135,7 @@ class Tratamiento
     /**
      * @return Factura
      */
-    public function getFactura(): ? Factura
+    public function getFactura(): ?Factura
     {
         return $this->factura;
     }
@@ -151,7 +151,7 @@ class Tratamiento
     /**
      * @return mixed
      */
-    public function getCliente() :?Cliente
+    public function getCliente(): ?Cliente
     {
         return $this->cliente;
     }
@@ -170,5 +170,8 @@ class Tratamiento
         return $this->conceptos;
     }
 
-
+    public function __toString()
+    {
+        return $this->fechaTratamiento->format('d-m-Y') . ' ' . $this->getDescripcion();   // TODO: Implement __toString() method.
+    }
 }

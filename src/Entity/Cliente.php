@@ -383,4 +383,9 @@ class Cliente
         $this->idAnterior = $idAnterior;
     }
 
+    public function __toString()
+    {
+     return $this->apellido1. ' '.$this->apellido2.', '.$this->nombre;   // TODO: Implement __toString() method.
+    }
+
 }
