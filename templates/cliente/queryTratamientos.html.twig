@@ -1,0 +1,58 @@
+{% extends "base.html.twig" %}
+{% block title %} CONSULTA TRATAMIENTOS {% endblock %}
+{% block titulo %}
+    <div id='dtitulo' class="container"> CONSULTA TRATAMIENTOS <br/>{{ cliente.alias }}
+        <a href="{{ path('add_tratamiento',{'cliente_id':cliente.id}) }}"
+           class="btn btn-success">
+            <span class="glyphicon glyphicon-new-window"></span> Nuevo Tratamiento</a>
+        <hr/>
+    </div>
+{% endblock %}
+
+{% block contenido %}
+    <div class="container">
+        {% for message in app.session.flashbag().get('status') %}
+            <div class="alert alert-success">
+                {{message}}
+            </div>
+            <hr/>
+        {% endfor %}
+    </div>
+
+    <div class="container">
+        <table id="tablaTratamientos" class="tabla table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>Fecha</th>
+                <th>Motivo Consulta</th>
+                <th>Tratamiento </th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for registro in tratamientos %}
+                <tr>
+                    <td>{{ registro.id }}</td>
+                    <td style="width: 150px" >{{ registro.fechaTratamiento|date ('d-m-Y') }}</td>
+                    <td>{{ registro.motivoConsulta }}</td>
+                    <td>{{ registro.descripcion }}</td>
+                    <td>
+                        <a data-toggle="tooltip" title=" Editar Tratamiento"
+                           href="{{ path("edit_tratamiento",{"tratamiento_id":registro.id}) }}">
+                            <span class="glyphicon glyphicon-edit"></span> </a>
+                        {% if registro.facturas|length >0  %}
+                            {% for factura in registro.facturas %}
+                                <a data-toggle="tooltip" title=" Consultar Factura"
+                                   href="{{ path("ver_factura",{"factura_id":factura.id}) }}">
+                                    <span class="glyphicon glyphicon-euro"></span> </a>
+
+                            {% endfor %}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

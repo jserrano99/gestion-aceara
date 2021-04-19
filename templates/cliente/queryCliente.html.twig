@@ -36,16 +36,19 @@
                     <td>{{ registro.apellido2 }}</td>
                     <td>
                         <a data-toggle="tooltip" title=" Editar Cliente"
-                           href="{{ path("edit_cliente",{"cliente_id":registro.id}) }}">
+                           href="{{ path("edit_cliente",{"cliente_id":registro.id}) }}"
+                           target="_blank">
                             <span class="glyphicon glyphicon-edit"></span> </a>
                         {% if not registro.tratamientos.empty %}
                             <a data-toggle="tooltip" title=" Consultar Tratamientos"
-                               href="{{ path("query_tratamientos",{"cliente_id":registro.id}) }}">
+                               href="{{ path("query_tratamientos",{"cliente_id":registro.id}) }}"
+                               target="_blank">
                                 <span class="glyphicon glyphicon-search"></span> </a>
                         {% endif %}
                         {% if not registro.facturas.empty %}
                             <a data-toggle="tooltip" title=" Consultar Facturas"
-                               href="{{ path("query_facturas_cliente",{"cliente_id":registro.id}) }}">
+                               href="{{ path("query_facturas_cliente",{"cliente_id":registro.id}) }}"
+                               target="_blank">
                                 <span class="glyphicon glyphicon-euro"></span> </a>
                         {% endif %}
 

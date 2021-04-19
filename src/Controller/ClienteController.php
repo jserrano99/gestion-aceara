@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Cliente;
+use App\Entity\Factura;
 use App\Entity\TipoTratamiento;
 use App\Entity\Tratamiento;
 use App\Entity\TratamientoConcepto;
@@ -47,17 +48,17 @@ class ClienteController extends AbstractController
      * @return JsonResponse|Response
      */
 
-    public function editCliente(Request $request,int $cliente_id): Response
+    public function editCliente(Request $request, int $cliente_id): Response
     {
         $em = $this->getDoctrine()->getManager();
         $Cliente = $em->getRepository("App:Cliente")->find($cliente_id);
 
         $form = $this->createForm(ClienteType::class, $Cliente);
         $form->handleRequest($request);
-        if ($form->isSubmitted() ) {
+        if ($form->isSubmitted()) {
             $CodigoPostal = $em->getRepository("App:CodigoPostal")->findOneBy(["codigo" => $Cliente->getCodigoPostal()]);
             if ($CodigoPostal) $Cliente->setLocalidad($CodigoPostal->getLocalidad());
-            $status = " CLIENTE ID " . $Cliente->getId().' '.$Cliente->getAlias(). ' MODIFICADO';
+            $status = " CLIENTE ID " . $Cliente->getId() . ' ' . $Cliente->getAlias() . ' MODIFICADO';
             $this->addFlash("info", $status);
             $em->persist($Cliente);
             $em->flush();
@@ -82,9 +83,9 @@ class ClienteController extends AbstractController
 
         $form = $this->createForm(ClienteType::class, $Cliente);
         $form->handleRequest($request);
-        if ($form->isSubmitted() ) {
+        if ($form->isSubmitted()) {
             $CodigoPostal = $em->getRepository("App:CodigoPostal")->findOneBy(["codigo" => $form->getData('codigoPostal')]);
-            If ($CodigoPostal) $Cliente->setLocalidad($CodigoPostal->getLocalidad());
+            if ($CodigoPostal) $Cliente->setLocalidad($CodigoPostal->getLocalidad());
             $em->persist($Cliente);
             $em->flush();
         }
@@ -101,11 +102,11 @@ class ClienteController extends AbstractController
      * @return JsonResponse|Response
      */
 
-    public function deleteCliente(Request $request,int $cliente_id): Response
+    public function deleteCliente(Request $request, int $cliente_id): Response
     {
         $em = $this->getDoctrine()->getManager();
         $Cliente = $em->getRepository("App:Cliente")->find($cliente_id);
-        $status = " CLIENTE ID " . $Cliente->getId().' '.$Cliente->getAlias(). ' CORRECTAMENTE ELIMININADO';
+        $status = " CLIENTE ID " . $Cliente->getId() . ' ' . $Cliente->getAlias() . ' CORRECTAMENTE ELIMININADO';
         $this->addFlash("info", $status);
         $em->remove($Cliente);
         $em->flush();
@@ -120,7 +121,7 @@ class ClienteController extends AbstractController
      * @return JsonResponse|Response
      */
 
-    public function queryTratamientos(Request $request,int $cliente_id): Response
+    public function queryTratamientos(Request $request, int $cliente_id): Response
     {
         $em = $this->getDoctrine()->getManager();
         $Cliente = $em->getRepository("App:Cliente")->find($cliente_id);
@@ -139,14 +140,14 @@ class ClienteController extends AbstractController
      * @return JsonResponse|Response
      */
 
-    public function editTratamiento(Request $request,int $tratamiento_id): Response
+    public function editTratamiento(Request $request, int $tratamiento_id): Response
     {
         $em = $this->getDoctrine()->getManager();
         $Tratamiento = $em->getRepository("App:Tratamiento")->find($tratamiento_id);
-        $form = $this->createForm(TratamientoType::class,$Tratamiento);
+        $form = $this->createForm(TratamientoType::class, $Tratamiento);
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
-            $this->addFlash('info',"Tratamiento modificado corretamente");
+            $this->addFlash('info', "Tratamiento modificado corretamente");
             $em->persist($Tratamiento);
             $em->flush();
         }
@@ -154,7 +155,7 @@ class ClienteController extends AbstractController
         return $this->render('cliente/editTratamiento.html.twig', [
             'cliente' => $Tratamiento->getCliente(),
             'tratamiento' => $Tratamiento,
-            'form' =>$form->createView()
+            'form' => $form->createView()
         ]);
     }
 
@@ -172,9 +173,20 @@ class ClienteController extends AbstractController
         $Tratamiento = new Tratamiento();
         $Tratamiento->setCliente($Cliente);
 
+        $form = $this->createForm(TratamientoType::class, $Tratamiento);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $this->addFlash('info', "Tratamiento creado corretamente");
+//            $Tratamiento->setFactura(new Factura());
+            $em->persist($Tratamiento);
+            $em->flush();
+            return $this->redirectToRoute('edit_tratamiento',['tratamiento_id'=> $Tratamiento->getId()]);
+        }
         return $this->render('cliente/editTratamiento.html.twig', [
             'cliente' => $Tratamiento->getCliente(),
-            'tratamiento' => $Tratamiento
+            'tratamiento' => $Tratamiento,
+            'form' => $form->createView()
         ]);
     }
 
@@ -185,7 +197,7 @@ class ClienteController extends AbstractController
      * @return JsonResponse|Response
      */
 
-    public function deleteTratamiento(Request $request,int $tratamiento_id): Response
+    public function deleteTratamiento(Request $request, int $tratamiento_id): Response
     {
         $em = $this->getDoctrine()->getManager();
         $Tratamiento = $em->getRepository("App:Tratamiento")->find($tratamiento_id);
@@ -204,7 +216,7 @@ class ClienteController extends AbstractController
      * @return JsonResponse|Response
      */
 
-    public function addConcepto(Request $request,int $tratamiento_id): Response
+    public function addConcepto(Request $request, int $tratamiento_id): Response
     {
         $em = $this->getDoctrine()->getManager();
         $Tratamiento = $em->getRepository("App:Tratamiento")->find($tratamiento_id);
@@ -220,13 +232,13 @@ class ClienteController extends AbstractController
             $TratamientoConcepto->setUnidades($form['unidades']->getData());
             $TratamientoConcepto->setDescripcion($TipoTratamiento->getDescripcion());
             $TratamientoConcepto->setImporteUnitario($TipoTratamiento->getImporte());
-            $TratamientoConcepto->setImporteConcepto(round ($TipoTratamiento->getImporte()*$form['unidades']->getData(),2));
+            $TratamientoConcepto->setImporteConcepto(round($TipoTratamiento->getImporte() * $form['unidades']->getData(), 2));
             $TratamientoConcepto->setPorcentajeIva($TipoTratamiento->getTipoIva()->getPorcentaje());
-            $TratamientoConcepto->setCuotaIva(round($TratamientoConcepto->getImporteConcepto()*$TratamientoConcepto->getPorcentajeIva()/100,2));
-            $TratamientoConcepto->setImporteTotal($TratamientoConcepto->getImporteConcepto()+$TratamientoConcepto->getCuotaIva());
+            $TratamientoConcepto->setCuotaIva(round($TratamientoConcepto->getImporteConcepto() * $TratamientoConcepto->getPorcentajeIva() / 100, 2));
+            $TratamientoConcepto->setImporteTotal($TratamientoConcepto->getImporteConcepto() + $TratamientoConcepto->getCuotaIva());
             $em->persist($TratamientoConcepto);
             $em->flush();
-            return $this->redirectToRoute('edit_tratamiento',['tratamiento_id'=>$Tratamiento->getId()]);
+            return $this->redirectToRoute('edit_tratamiento', ['tratamiento_id' => $Tratamiento->getId()]);
         }
         return $this->render('cliente/addConcepto.html.twig', [
             'cliente' => $Tratamiento->getCliente(),
@@ -234,6 +246,7 @@ class ClienteController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
     /**
      * @Route("/cliente/tratamiento/concepto/delete/{concepto_id}", name="delete_concepto")
      * @param Request $request
@@ -241,7 +254,7 @@ class ClienteController extends AbstractController
      * @return JsonResponse|Response
      */
 
-    public function deleteConcepto(Request $request,int $concepto_id): Response
+    public function deleteConcepto(Request $request, int $concepto_id): Response
     {
         $em = $this->getDoctrine()->getManager();
         $TratamientoConcepto = $em->getRepository("App:TratamientoConcepto")->find($concepto_id);

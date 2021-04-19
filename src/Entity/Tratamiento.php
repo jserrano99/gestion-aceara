@@ -35,24 +35,23 @@ class Tratamiento
     private $descripcion;
 
     /**
-     * @ORM\OneToOne(targetEntity=Factura::class, mappedBy="tratamiento")
-     */
-    private $factura;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Cliente::class, inversedBy="tratamientos", cascade={"remove"})
      */
     private $cliente;
 
     /**
-     * @ORM\OneToMany(targetEntity=TratamientoConcepto::class, mappedBy="tratamiento")
+     * @ORM\OneToMany(targetEntity=TratamientoConcepto::class, mappedBy="tratamiento",cascade={"persist"})
      */
     private $conceptos;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Factura::class, mappedBy="tratamiento", orphanRemoval=true)
+     */
+    private $facturas;
 
     public function __construct()
     {
-        $this->factura = new ArrayCollection();
+        $this->facturas = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -133,22 +132,6 @@ class Tratamiento
     }
 
     /**
-     * @return Factura
-     */
-    public function getFactura(): ?Factura
-    {
-        return $this->factura;
-    }
-
-    /**
-     * @param Factura $factura
-     */
-    public function setFactura(?Factura $factura): void
-    {
-        $this->factura = $factura;
-    }
-
-    /**
      * @return mixed
      */
     public function getCliente(): ?Cliente
@@ -165,7 +148,7 @@ class Tratamiento
     /**
      * @return Collection|TratamientoConcepto[]
      */
-    public function getConceptos(): Collection
+    public function getConceptos(): ?Collection
     {
         return $this->conceptos;
     }
@@ -174,4 +157,36 @@ class Tratamiento
     {
         return $this->fechaTratamiento->format('d-m-Y') . ' ' . $this->getDescripcion();   // TODO: Implement __toString() method.
     }
+
+    /**
+     * @return Collection|Factura[]
+     */
+    public function getFacturas(): Collection
+    {
+        return $this->facturas;
+    }
+
+    public function addFactura(Factura $factura): self
+    {
+        if (!$this->facturas->contains($factura)) {
+            $this->facturas[] = $factura;
+            $factura->setTratamiento($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFactura(Factura $factura): self
+    {
+        if ($this->facturas->removeElement($factura)) {
+            // set the owning side to null (unless already changed)
+            if ($factura->getTratamiento() === $this) {
+                $factura->setTratamiento(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }

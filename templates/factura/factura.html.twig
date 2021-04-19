@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" lang="es">
+    <title>Factura</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700,700i" rel="stylesheet">
+    {# Bootstrap #}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+    <div style="margin-top: 10px">
+        <table>
+            <tr>
+                <td style="width: 50%;text-align: center"><img src="{{ absolute_url(asset("build/logoAceara.jpg")) }}"
+                                                               style="width:200px;height:200px"></td>
+                <td style="width: 50%;font-size:26px; text-emphasis: #080808">
+                    <span>C/VITORIA, 10 LOCAL 3</span> <br/>
+                    <span>28941 FUENLABRADA (Madrid)</span> <br/>
+                    <span>Teléfono: 916.069.306</span> <br/>
+                    <span>C.I.F.: 00277937M</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+</head>
+<body>
+<div style="margin-left: 100px;margin-top: 10px">
+    <table style="margin-left: 60px">
+        <tr>
+            <td style="text-align: left;width: 200px;font-weight: bold">NOMBRE Y APELLIDOS:</td>
+            <td style="text-align: left;font-style: italic;">{{ factura.cliente.apenom }}</td>
+        </tr>
+        <tr>
+            <td style="text-align: left;width: 200px;font-weight: bold">NIF :</td>
+            <td style="text-align: left;font-style: italic;">{{ factura.cliente.nif }}</td>
+        </tr>
+        <tr>
+            <td style="text-align: left;width: 200px;font-weight: bold">DOMICILIO :</td>
+            <td style="text-align: left;font-style: italic">{{ factura.cliente.domicilio }}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td style="text-align: left;font-style: italic;">{{ factura.cliente.codigoPostal }} {{ factura.cliente.localidad.descripcion }}</td>
+        </tr>
+    </table>
+</div>
+<div style="margin-left: 100px;margin-top: 10px">
+    <table style="margin-left: 20px">
+        <tr>
+            <td style="text-align: left;width: 140px;font-weight: bold">FACTURA Nº :</td>
+            <td style="text-align: left;font-style: italic;">{{ factura.serie }}/{{ factura.numero }}</td>
+        </tr>
+        <tr>
+            <td style="text-align: left;width: 140px;font-weight: bold">FECHA FACTURA :</td>
+            <td style="text-align: left;font-style: italic;">{{ factura.fechaFactura|date('d/m/Y') }}</td>
+        </tr>
+    </table>
+</div>
+<div style="margin-left: 50px; height: 700px;margin-top: 10px;border: thin #000;">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th style="text-align: center;width: 10%">Cantidad</th>
+            <th style="text-align: center;width: 50%">Concepto</th>
+            <th style="text-align: center;width: 20%">Precio Unitario</th>
+            <th style="text-align: center;width: 20%">Importe</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for lineafactura in factura.facturaLineas %}
+            <tr>
+                <td style="width: auto">{{ lineafactura.unidades }}</td>
+                <td style="width: 200px;margin-left: 10px">{{ lineafactura.concepto }}</td>
+                <td style="width: auto;text-align: right">{{ lineafactura.importeUnitario| number_format(2,',','.') }}
+                    €
+                </td>
+                <td style="width: auto;text-align: right">{{ lineafactura.importeConcepto |number_format(2,',','.') }}
+                    €
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div style="margin-left: 50px;height: 200px">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <td style="width: auto;text-align: center;background-color: #b1b0b0">BASE IMPONIBLE</td>
+            <td style="width: auto;text-align: center;background-color: #b1b0b0">IVA (21%)</td>
+            <td style="width: auto;text-align: center;background-color: #b1b0b0">TOTAL FACTURA</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td style="width: auto;text-align: right">{{ factura.totalConcepto| number_format(2,',','.') }} €</td>
+            <td style="width: auto;text-align: right">{{ factura.totalCuotaIva |number_format(2,',','.') }} €</td>
+            <td style="width: auto;text-align: right">{{ factura.totalFactura |number_format(2,',','.') }} €</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+<footer>
+    <table>
+        <tr>
+            <td style="width: 33%;">{{ factura.serie }}/ {{ factura.numero }}</td>
+            <td style="width: 33%;" class="right">&copy; Centro de Masajes Aceara {{ "now"|date("Y") }}</td>
+        </tr>
+    </table>
+</footer>
+
+</html>

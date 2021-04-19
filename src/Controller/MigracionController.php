@@ -54,13 +54,10 @@ class MigracionController extends AbstractController
     {
 
         $OldClientes = $this->getDoctrine()->getManager()->getRepository("App:OldClientes")->findBy(["migrado" => 0]);
-        dump(" CARGA MASIVA CLIENTES A CARGAR");
-        dump($OldClientes);
         /** @var OldClientes $OldCliente */
         foreach ($OldClientes as $OldCliente) {
             $this->cargaCLiente($OldCliente);
         }
-        die();
         return new Response();
     }
 
@@ -73,10 +70,7 @@ class MigracionController extends AbstractController
 
         /** @var OldClientes $OldCliente */
         $OldCliente = $em->getRepository("App:OldClientes")->find($oldcliente_id);
-        dump("CLIENTE A CARGAR ");
-        dump($OldCliente);
         $this->cargaCLiente($OldCliente);
-        die();
         return new Response();
     }
 
@@ -115,21 +109,16 @@ class MigracionController extends AbstractController
         $Cliente->setIdAnterior($OldCliente->getClienteId());
         $em->persist($Cliente);
         $em->flush();
-        dump("NUEVO CLIENTE");
-        dump($Cliente);
         $OldTratamientos = $em->getRepository("App:OldTratamientos")->findBy(["tratamientoIdcliente" => $OldCliente->getClienteId()]);
-        dump("TRATAMIENTOS ANTERIORES");
-        dump($OldTratamientos);
         /** @var OldTratamientos $oldTratamiento */
         foreach ($OldTratamientos as $oldTratamiento) {
-            dump($oldTratamiento);
             if (!is_null($oldTratamiento->getTratamientoFecha())) {
                 $Tratamiento = new Tratamiento();
                 $Tratamiento->setCliente($Cliente);
                 $Tratamiento->setDescripcion($oldTratamiento->getTratamientoDstratamiento());
                 $Tratamiento->setMotivoConsulta($oldTratamiento->getTratamientoDsmotivo());
                 $Tratamiento->setFechaTratamiento($oldTratamiento->getTratamientoFecha());
-                $Tratamiento->setFactura(null);
+//                $Tratamiento->setFactura(null);
                 $em->persist($Tratamiento);
                 $em->flush();
                 dump("NUEVO TRATAMIENTO");

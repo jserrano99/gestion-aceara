@@ -1,7 +1,7 @@
 {% extends "base.html.twig" %}
-{% block title %} CONSULTA FACTURAS {% endblock %}
+{% block title %} TIPOS DE TRATAMIENTO {% endblock %}
 {% block titulo %}
-    <div id='dtitulo' class="container"> CONSULTA FACTURAS
+    <div id='dtitulo' class="container"> CONSULTA TIPOS DE TRATAMIENTOS
         {#        <a href="#"#}
         {#           class="btn btn-success">#}
         {#            <span class="glyphicon glyphicon-new-window"></span> Nuevo Tratamiento</a>#}
@@ -20,33 +20,30 @@
     </div>
 
     <div class="container">
-        <table id="tablaFacturas" class="tabla table table-striped table-bordered">
+        <table id="tabla" class="tabla table table-striped table-bordered">
             <thead>
             <tr>
                 <th>id</th>
-                <th>Fecha</th>
-                <th>Serie</th>
-                <th>Número</th>
-                <th>Cliente</th>
+                <th>Descripción</th>
+                <th>Importe Unitario (Sin IVA)</th>
+                <th>Tipo de IVA</th>
+                <th>Cuota IVA</th>
+                <th>Importe</th>
                 <th>Acciones</th>
             </tr>
             </thead>
             <tbody>
-            {% for registro in facturas %}
+            {% for registro in tiposTratamiento %}
                 <tr>
                     <td>{{ registro.id }}</td>
-                    <td>{{ registro.fechaFactura|date ('Y-m-d') }}</td>
-                    <td>{{ registro.serie }}</td>
-                    <td>{{ registro.numero }}</td>
+                    <td>{{ registro.descripcion}}</td>
+                    <td>{{ registro.importe | number_format(2,',','.') }} € </td>
+                    <td>{{ registro.tipoIva.porcentaje }} % </td>
+                    <td>{{ registro.cuotaIva |number_format(2,',','.') }} € </td>
+                    <td>{{ registro.importeTotal |number_format(2,',','.') }} € </td>
                     <td>
-                        <a href="{{ path("edit_cliente",{"cliente_id":registro.cliente.id}) }}">
-                        {{ registro.cliente.apellido1 }} {{ registro.cliente.apellido2 }}
-                            , {{ registro.cliente.nombre }}</a> </td>
-                    <td>
-                        <a href="{{ path("ver_factura",{"factura_id":registro.id}) }}">
+                        <a data-toggle="tooltip" title=" Editar " href="{{ path("edit_tipoTratamiento",{"tipoTratamiento_id":registro.id}) }}">
                             <span class="glyphicon glyphicon-edit"></span> </a>
-                        <a href="{{ path("imprimir_factura",{"factura_id":registro.id}) }}">
-                            <span class="glyphicon glyphicon-print"></span> </a>
                     </td>
                 </tr>
             {% endfor %}

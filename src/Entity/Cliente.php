@@ -388,4 +388,7 @@ class Cliente
      return $this->apellido1. ' '.$this->apellido2.', '.$this->nombre;   // TODO: Implement __toString() method.
     }
 
+    public function getApenom() {
+        return $this->getApellido1().' '.$this->getApellido2().', '.$this->getNombre();
+    }
 }

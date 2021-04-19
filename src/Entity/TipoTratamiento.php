@@ -30,6 +30,17 @@ class TipoTratamiento
     private $importe;
 
     /**
+     * @ORM\Column(type="float")
+     */
+    private $cuotaIva;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $importeTotal;
+
+
+    /**
      * @ORM\ManyToOne(targetEntity=TipoIva::class, inversedBy="tipoTratamientos")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -103,6 +114,38 @@ class TipoTratamiento
     public function __toString()
     {
         return $this->descripcion;   // TODO: Implement __toString() method.
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCuotaIva()
+    {
+        return $this->cuotaIva;
+    }
+
+    /**
+     * @param mixed $cuotaIva
+     */
+    public function setCuotaIva($cuotaIva): void
+    {
+        $this->cuotaIva = $cuotaIva;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImporteTotal()
+    {
+        return $this->importeTotal;
+    }
+
+    /**
+     * @param mixed $importeTotal
+     */
+    public function setImporteTotal($importeTotal): void
+    {
+        $this->importeTotal = $importeTotal;
     }
 
 

@@ -97,4 +97,9 @@ class TipoIva
 
         return $this;
     }
+
+    public function __toString()
+    {
+     return $this->descripcion;   // TODO: Implement __toString() method.
+    }
 }

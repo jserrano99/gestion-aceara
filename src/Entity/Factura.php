@@ -39,13 +39,7 @@ class Factura
      * @ORM\JoinColumn(nullable=false)
      */
     private $cliente;
-
-    /**
-     * @ORM\OneToOne(targetEntity=Tratamiento::class, inversedBy="factura")
-     */
-    private $tratamiento;
-
-    /**
+   /**
      * @ORM\Column(type="float")
      */
     private $totalConcepto;
@@ -64,6 +58,12 @@ class Factura
      * @ORM\OneToMany(targetEntity=FacturaLinea::class, mappedBy="factura")
      */
     private $facturaLineas;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Tratamiento::class, inversedBy="facturas")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $tratamiento;
 
     public function __construct()
     {
@@ -119,18 +119,6 @@ class Factura
     public function setCliente(?Cliente $cliente): self
     {
         $this->cliente = $cliente;
-
-        return $this;
-    }
-
-    public function getTratamiento(): ?Tratamiento
-    {
-        return $this->tratamiento;
-    }
-
-    public function setTratamiento(?Tratamiento $tratamiento): self
-    {
-        $this->tratamiento = $tratamiento;
 
         return $this;
     }
@@ -213,5 +201,21 @@ class Factura
         $this->totalfactura = $totalfactura;
     }
 
+    public function __toString()
+    {
+     return $this->serie.'/'.$this->getNumero();   // TODO: Implement __toString() method.
+    }
+
+    public function getTratamiento(): ?Tratamiento
+    {
+        return $this->tratamiento;
+    }
+
+    public function setTratamiento(?Tratamiento $tratamiento): self
+    {
+        $this->tratamiento = $tratamiento;
+
+        return $this;
+    }
 
 }

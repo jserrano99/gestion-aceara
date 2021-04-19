@@ -22,7 +22,7 @@ class FacturaType extends AbstractType
                 'disabled' => true,
                 "attr" => ["class" => "form-control"
                 ]])
-            ->add('numero',TextType::class, [
+            ->add('numero', TextType::class, [
                 "label" => 'Número',
                 "required" => true,
                 'disabled' => false,
@@ -46,10 +46,12 @@ class FacturaType extends AbstractType
             ->add('deleteFactura', ButtonType::class, [
                 'label' => 'Eliminar ',
                 "attr" => ["class" => "btn btn-t btn-danger"]])
+            ->add('imprimirFactura', ButtonType::class, [
+                'label' => 'Imprimir ',
+                "attr" => ["class" => "btn btn-t btn-info"]])
             ->add('Guardar', SubmitType::class, [
                 "attr" => ["class" => "btn btn-t btn-success"
-                ]]);
-        ;
+                ]]);;
     }
 
     public function configureOptions(OptionsResolver $resolver)

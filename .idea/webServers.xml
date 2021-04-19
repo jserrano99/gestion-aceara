@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="8657df30-6ae8-4cf7-ac7d-ce122bf8f3b1" name="foysi-webserver" url="http://217.76.155.215">
+        <fileTransfer rootFolder="/gestion2.masajesaceara.es" host="217.76.155.215" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

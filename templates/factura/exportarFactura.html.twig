@@ -1,0 +1,19 @@
+{% extends "base.html.twig" %}
+{% block title %} CONSULTA DE FACTURAS  DE CLIENTE {% endblock %}
+{% block titulo %}
+    <div id='dtitulo' class="container">
+        EXPORTAR FACTURAS
+    </div>
+{% endblock %}
+{% block contenido %}
+    <div class="container">
+        {{ form_start (form,{'action':'','method':'POST'}) }}
+        {{ form_errors(form) }}
+        <div class="form-row">{{ form_row(form.fechaInicio) }}</div>
+        <div class="form-row">{{ form_row(form.fechaFin) }}</div>
+        <div class="form-row">
+            <div class="form-group col-md-1">{{ form_row(form.Guardar) }}</div>
+        </div>
+        {{ form_end (form) }}
+    </div>
+{% endblock %}

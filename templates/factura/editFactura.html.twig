@@ -41,6 +41,14 @@
                     }
                 });
             });
+            $("#formFactura_imprimirFactura").click(function () {
+                let recurso;
+                let id;
+                id = $("#formFactura_id").val();
+                recurso = Routing.generate("imprimir_factura", {"factura_id": id}, true);
+                window.location = recurso;
+            });
+
         });
     </script>
     <div class="container">
@@ -50,12 +58,18 @@
             <div class="panel-heading"> Datos del Cliente</div>
             <div class="panel-body">
                 <h4>
-                <div class="form-row">
-                    <div class="form-row btn-t"> NIF: {{ factura.cliente.nif }}</div>
-                    <div class="form-row btn-t"> NOMBRE: {{ factura.cliente|upper}}</div>
-                    <div class="form-row btn-t"> DOMICILIO: {{ factura.cliente.domicilio|upper }} {{ factura.cliente.codigoPostal }} {{ factura.cliente.localidad.descripcion| upper }}</div>
-                    <div class="form-row btn-t"> TRATAMIENTO: {{ factura.tratamiento.id }} Fecha: {{ factura.tratamiento.fechaTratamiento|date('d-m-Y') }}</div>
-                </div>
+                    <div class="form-row">
+                        <div class="form-row btn-t"> NIF: {{ factura.cliente.nif }}</div>
+                        <div class="form-row btn-t"> NOMBRE: {{ factura.cliente|upper }}</div>
+                        {% if factura.cliente.domicilio is not null %}
+                            <div class="form-row btn-t">
+                                DOMICILIO: {{ factura.cliente.domicilio|upper }} {{ factura.cliente.codigoPostal }} {{ factura.cliente.localidad.descripcion| upper }}</div>
+                        {% endif %}
+                        {% if factura.tratamiento is not null %}
+                            <div class="form-row btn-t"> TRATAMIENTO: {{ factura.tratamiento.id }}
+                                Fecha: {{ factura.tratamiento.fechaTratamiento|date('d-m-Y') }}</div>
+                        {% endif %}
+                    </div>
                 </h4>
             </div>
         </div>
@@ -92,21 +106,25 @@
                             <td style="width: auto">{{ lineafactura.id }}</td>
                             <td style="width: 100px">{{ lineafactura.concepto }}</td>
                             <td style="width: auto">{{ lineafactura.unidades }}</td>
-                            <td style="width: auto">{{ lineafactura.importeUnitario| number_format(2,',','.') }} € </td>
-                            <td style="width: auto">{{ lineafactura.importeConcepto |number_format(2,',','.') }} € </td>
+                            <td style="width: auto">{{ lineafactura.importeUnitario| number_format(2,',','.') }} €</td>
+                            <td style="width: auto">{{ lineafactura.importeConcepto |number_format(2,',','.') }} €</td>
                             <td style="width: auto">{{ lineafactura.porcentajeIva | number_format(2,',','.') }} %</td>
-                            <td style="width: auto">{{ lineafactura.cuotaIva | number_format(2,',','.') }} € </td>
-                            <td style="width: auto;text-align: right">{{ lineafactura.importeTotal |number_format(2,',','.') }} € </td>
+                            <td style="width: auto">{{ lineafactura.cuotaIva | number_format(2,',','.') }} €</td>
+                            <td style="width: auto;text-align: right">{{ lineafactura.importeTotal |number_format(2,',','.') }}
+                                €
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>
                     <tfoot>
                     <tr>
                         <td style=" font-weight:bold;text-align:right" colspan="4">Totales</td>
-                        <td style="width: auto">{{ factura.totalConcepto |number_format(2,',','.') }} € </td>
+                        <td style="width: auto">{{ factura.totalConcepto |number_format(2,',','.') }} €</td>
                         <td style="width: auto"></td>
-                        <td style="width: auto">{{ factura.totalCuotaIva | number_format(2,',','.') }} € </td>
-                        <td style="width: auto;text-align: right">{{ factura.totalfactura|number_format(2,',','.') }} € </td>
+                        <td style="width: auto">{{ factura.totalCuotaIva | number_format(2,',','.') }} €</td>
+                        <td style="width: auto;text-align: right">{{ factura.totalfactura|number_format(2,',','.') }}
+                            €
+                        </td>
                     </tr>
                     </tfoot>
                 </table>
@@ -115,6 +133,7 @@
         <div class="form-row">
             <div class="form-group col-md-1">{{ form_row(form.Guardar) }}</div>
             <div class="form-group col-md-2">{{ form_row(form.deleteFactura) }}</div>
+            <div class="form-group col-md-2">{{ form_row(form.imprimirFactura) }}</div>
         </div>
         {{ form_end (form) }}
     </div>

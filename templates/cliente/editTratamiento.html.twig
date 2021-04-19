@@ -42,7 +42,9 @@
                 <ul class="nav nav-tabs">
                     <li><a id="t1" href="#motivoConsulta">Motivo Consulta</a></li>
                     <li><a id="t2" href="#descripcion">Descripcion</a></li>
-                    <li><a id="t3" href="#conceptos">Conceptos del Tratamiento</a></li>
+                    {% if tratamiento.id is not null %}
+                        <li><a id="t3" href="#conceptos">Conceptos del Tratamiento</a></li>
+                    {% endif %}
                 </ul>
                 <div id="motivoConsulta">
                     <div class="form_row ">{{ form_row(form.motivoConsulta) }}</div>
@@ -50,65 +52,74 @@
                 <div id="descripcion">
                     <div class="form_row ">{{ form_row(form.descripcion) }}</div>
                 </div>
-                <div id="conceptos">
-                    {% if tratamiento.factura is  null %}
-                        <a data-toggle="tooltip" title=" Añadir Concepto"
-                           href="{{ path("add_concepto",{'tratamiento_id':tratamiento.id}) }}"
-                           class="btn btn-warning">
-                            <span class="glyphicon glyphicon-new-window"></span> Añadir Concepto</a>
-                    {% endif %}
-                    <table id="tratamientosConceptosTabla" class="tabla table table-striped table-bordered"
-                           style="width:100%">
-                        <thead>
-                        <tr>
-                            <th style="width: auto">id</th>
-                            <th style="width: auto">Tipo Tratamiento</th>
-                            <th style="width: auto">Unidades</th>
-                            <th style="width: auto">Importe Unitario</th>
-                            <th style="width: auto">Importe Concepto</th>
-                            <th style="width: auto">IVA</th>
-                            <th style="width: auto">Cuota IVA</th>
-                            <th style="width: auto">Importe Total</th>
-                            <th style="width: auto">Acciones</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for concepto in tratamiento.conceptos %}
+                {% if tratamiento.id is not null %}
+                    <div id="conceptos">
+                        {% if tratamiento.facturas|length == 0  %}
+                            <a data-toggle="tooltip" title=" Añadir Concepto"
+                               href="{{ path("add_concepto",{'tratamiento_id':tratamiento.id}) }}"
+                               class="btn btn-warning">
+                                <span class="glyphicon glyphicon-new-window"></span> Añadir Concepto</a>
+                        {% endif %}
+                        <table id="tratamientosConceptosTabla" class="tabla table table-striped table-bordered"
+                               style="width:100%">
+                            <thead>
                             <tr>
-                                <td style="width: auto">{{ concepto.id }}</td>
-                                <td style="width: auto">{{ concepto.descripcion }}</td>
-                                <td style="width: 100px">{{ concepto.unidades }}</td>
-                                <td style="width: auto">{{ concepto.importeUnitario|number_format(2,',','.') }} €</td>
-                                <td style="width: auto">{{ concepto.importeConcepto|number_format(2,',','.') }} €</td>
-                                <td style="width: 100px">{{ concepto.porcentajeIva |number_format(2,',','.') }} %</td>
-                                <td style="width: 100px">{{ concepto.cuotaIva|number_format(2,',','.') }} €</td>
-                                <td style="width: 100px">{{ concepto.importeTotal|number_format(2,',','.') }} €</td>
-                                <td style="width: 115px">
-                                    {% if tratamiento.factura is  null %}
-                                        <a data-toggle="tooltip" title=" Borrar Concepto"
-                                           href="{{ path("delete_concepto",{'concepto_id':concepto.id}) }}"
-                                           class="btn btn-danger">
-                                            <span class="glyphicon glyphicon-trash"></span></a>
-                                    {% endif %}
-                                </td>
+                                <th style="width: auto">id</th>
+                                <th style="width: auto">Tipo Tratamiento</th>
+                                <th style="width: auto">Unidades</th>
+                                <th style="width: auto">Importe Unitario</th>
+                                <th style="width: auto">Importe Concepto</th>
+                                <th style="width: auto">IVA</th>
+                                <th style="width: auto">Cuota IVA</th>
+                                <th style="width: auto">Importe Total</th>
+                                <th style="width: auto">Acciones</th>
                             </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+                            </thead>
+                            <tbody>
+                            {% for concepto in tratamiento.conceptos %}
+                                <tr>
+                                    <td style="width: auto">{{ concepto.id }}</td>
+                                    <td style="width: auto">{{ concepto.descripcion }}</td>
+                                    <td style="width: 100px">{{ concepto.unidades }}</td>
+                                    <td style="width: auto">{{ concepto.importeUnitario|number_format(2,',','.') }}€
+                                    </td>
+                                    <td style="width: auto">{{ concepto.importeConcepto|number_format(2,',','.') }}€
+                                    </td>
+                                    <td style="width: 100px">{{ concepto.porcentajeIva |number_format(2,',','.') }}%
+                                    </td>
+                                    <td style="width: 100px">{{ concepto.cuotaIva|number_format(2,',','.') }} €</td>
+                                    <td style="width: 100px">{{ concepto.importeTotal|number_format(2,',','.') }} €</td>
+                                    <td style="width: 115px">
+                                        {% if tratamiento.facturas|length == 0 %}
+                                            <a data-toggle="tooltip" title=" Borrar Concepto"
+                                               href="{{ path("delete_concepto",{'concepto_id':concepto.id}) }}"
+                                               class="btn btn-danger">
+                                                <span class="glyphicon glyphicon-trash"></span></a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
                 <div class="form-row">
                     <div class="form-group col-md-1">{{ form_row(form.Guardar) }}</div>
                     <div class="form-group col-md-2">{{ form_row(form.deleteTratamiento) }}</div>
-                    {% if tratamiento.factura is not null %}
-                        <a data-toggle="tooltip" title="Ver Factura"
-                           href="{{ path("ver_factura",{'factura_id':tratamiento.factura.id}) }}"
-                           class="btn btn-t btn-success">
-                            <span class="glyphicon glyphicon-new-window"></span> Ver Factura</a>
+                    {% if tratamiento.facturas|length > 0 %}
+                        {% for factura in tratamiento.facturas %}
+                            <a data-toggle="tooltip" title="Ver Factura"
+                               href="{{ path("ver_factura",{'factura_id':factura.id}) }}"
+                               class="btn btn-t btn-success">
+                                <span class="glyphicon glyphicon-new-window"></span> Ver Factura</a>
+                        {% endfor %}
                     {% else %}
+                        {% if tratamiento.id is not null and tratamiento.conceptos|length > 0  %}
                         <a data-toggle="tooltip" title=" Generar Factura "
                            href="{{ path("generar_factura",{'tratamiento_id':tratamiento.id}) }}"
                            class="btn btn-t btn-warning">
                             <span class="glyphicon glyphicon-new-window"></span> Generar Factura</a>
+                            {% endif %}
                     {% endif %}
 
                 </div>
